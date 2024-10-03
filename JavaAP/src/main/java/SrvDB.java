@@ -1,22 +1,6 @@
-public class SrvDB implements  ActionUser{
-    private String info;
+import java.util.Optional;
 
-    SrvDateBase srvDateBase;
+public class SrvDB{
 
-    public SrvDB(SrvDateBase srvDateBase) {
-        this.srvDateBase = srvDateBase;
-    }
 
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    @Override
-    public void GET(int t) {
-
-    }
 }
