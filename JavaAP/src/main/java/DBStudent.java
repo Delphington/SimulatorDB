@@ -7,15 +7,16 @@ import java.util.Optional;
 
 public class DBStudent implements ActionStudent, ConstantsStudents {
 
-    Connection connection;
-    PreparedStatement preparedStatement;
+    Connection connection; // предоставляет соедниение с БД
+    PreparedStatement preparedStatement; //Позволяет выполнять запросы к БД
     ResultSet results;
-    StringBuilder ans =new StringBuilder();
-   // ans = null;
-    String strt = new String();
+    StringBuilder temp = new StringBuilder();
+    // ans = null;
+    String ans = new String();
 
 
-    public DBStudent() {}
+    public DBStudent() {
+    }
 
     public void setConnectionToBD() {
 
@@ -32,32 +33,110 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
     }
 
 
+    /**
+     * Получает информацию о студенте из базы данных по заданному идентификатору студента.
+     *
+     * <p> Метод выполняет SQL-запрос для поиска студента по его идентификатору
+     * и возвращает опциональную строку с деталями студента. Если студент с указанным
+     * идентификатором не найден, возвращается пустой объект {@link Optional}.</p>
+     *
+     * @param id уникальный идентификатор студента, информацию о котором нужно получить
+     * @return объект {@link Optional}, содержащий строку с деталями студента, если он найден,
+     *         или пустой {@link Optional}, если студент с данным идентификатором не существует
+     */
     @Override
     public Optional<Object> GET(int id) {
-        String str = "SELECT * FROM students WHERE student_id =" + String.valueOf(id) + "";
+        String query = "SELECT * " +
+                "FROM students " +
+                "WHERE student_id =" + id + ";";
         try {
-            preparedStatement = connection.prepareStatement(str);
+            preparedStatement = connection.prepareStatement(query); // позволяет выполнить запрос к БД
             results = preparedStatement.executeQuery();
 
-            //Если неверное значени, то он  сюда не зайдет, ибо если просто оставить  будут ошибка
+            //если объект не найден, мы сюда не зайдем. Но если .next() -> вылитит Exception
+            // Но сли найден, то нужно будет итерироваться
             while (results.next()) {
-                System.out.println("Im here");
-                ans.append(results.getString(STUDENT_ID))
+                temp.append(results.getString(STUDENT_ID))
                         .append(Config.SPACE)
                         .append(results.getString(STUDENT_NAME))
                         .append(Config.SPACE)
-                        .append(results.getString(STUDENT_COURSE));
-                strt = String.valueOf(ans);
+                        .append(results.getString(STUDENT_COURSE))
+                        .append('\n');
             }
+            ans = String.valueOf(temp);
 
-            if(strt.isEmpty()){
-                return Optional.ofNullable(null);
+            // Если строка пустаю выкинем оболочку на null
+            if (ans.isEmpty()) {
+                return Optional.empty();
             }
-            return Optional.of(strt);
+            return Optional.ofNullable(ans);
 
         } catch (SQLException e) {
             System.out.println("Какая-то ошибка: " + e.getMessage());
         }
-        return Optional.ofNullable(null);
+        return Optional.empty();
+    }
+
+
+    @Override
+    public Optional<Object> GET(String nothing, int id) {
+
+        String query = "SELECT * " +
+                "FROM students " +
+                "WHERE course_number = " + id + " ORDER BY student_name";
+
+        try {
+            preparedStatement = connection.prepareStatement(query); // позволяет выполнить запрос к БД
+            results = preparedStatement.executeQuery();
+
+            //если объект не найден, мы сюда не зайдем. Но если .next() -> вылитит Exception
+            // Но сли найден, то нужно будет итерироваться
+            while (results.next()) {
+                temp.append(results.getString(STUDENT_ID))
+                        .append(Config.SPACE)
+                        .append(results.getString(STUDENT_NAME))
+                        .append(Config.SPACE)
+                        .append(results.getString(STUDENT_COURSE))
+                        .append("\n");
+            }
+            ans = String.valueOf(temp);
+
+            // Если строка пустаю выкинем оболочку на null
+            if (ans.isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.ofNullable(ans);
+
+
+        } catch (SQLException e) {
+            System.out.println("Какая-то ошибка: " + e.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+
+    @Override
+    public Optional<Object> INSERT(String studentName, int course) {
+        String query = "INSERT INTO students (student_name, course_number) VALUES (?, ?)";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+
+            // Устанавливаем значения параметров
+            preparedStatement.setString(1, studentName);
+            preparedStatement.setInt(2, course); // Предполагается, что course_number — это целое число
+
+            int x = preparedStatement.executeUpdate();
+            if (x == 0) {
+                return Optional.empty();
+            }
+            return Optional.ofNullable(ans);
+
+
+        } catch (SQLException e) {
+            System.out.println("Какая-то ошибка: " + e.getMessage());
+        }
+        return Optional.empty();
+
     }
 }
