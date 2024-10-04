@@ -5,13 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class DBStudent implements ActionStudent, ConstantsStudents {
+public class DBStudent implements ActionStudent, Constants {
 
     Connection connection; // предоставляет соедниение с БД
     PreparedStatement preparedStatement; //Позволяет выполнять запросы к БД
     ResultSet results;
     StringBuilder temp = new StringBuilder();
-    // ans = null;
+
     String ans = new String();
 
 
@@ -23,11 +23,11 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
         try {
             connection = DriverManager.getConnection(Config.URL_STUDY, Config.USER, Config.PASSWORD);
             if (connection != null) {
-                System.out.println("Соединение установлено!");
+                System.out.println(MESSAGE_CONNECTION_SUCCESS);
             }
 
         } catch (SQLException e) {
-            System.out.println("Ошибка соединения: " + e.getMessage());
+            System.out.println(MESSAGE_CONNECTION_ERROR + e.getMessage());
 
         }
     }
@@ -57,9 +57,9 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
             // Но сли найден, то нужно будет итерироваться
             while (results.next()) {
                 temp.append(results.getString(STUDENT_ID))
-                        .append(Config.SPACE)
+                        .append(SPACE)
                         .append(results.getString(STUDENT_NAME))
-                        .append(Config.SPACE)
+                        .append(SPACE)
                         .append(results.getString(STUDENT_COURSE))
                         .append('\n');
             }
@@ -72,7 +72,7 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
             return Optional.ofNullable(ans);
 
         } catch (SQLException e) {
-            System.out.println("Какая-то ошибка: " + e.getMessage());
+            System.out.println(MESSAGE_ERROR + e.getMessage());
         }
         return Optional.empty();
     }
@@ -93,9 +93,9 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
             // Но сли найден, то нужно будет итерироваться
             while (results.next()) {
                 temp.append(results.getString(STUDENT_ID))
-                        .append(Config.SPACE)
+                        .append(SPACE)
                         .append(results.getString(STUDENT_NAME))
-                        .append(Config.SPACE)
+                        .append(SPACE)
                         .append(results.getString(STUDENT_COURSE))
                         .append("\n");
             }
@@ -109,7 +109,7 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
 
 
         } catch (SQLException e) {
-            System.out.println("Какая-то ошибка: " + e.getMessage());
+            System.out.println(MESSAGE_ERROR + e.getMessage());
         }
 
         return Optional.empty();
@@ -130,7 +130,7 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
             }
             return Optional.ofNullable(x);
         } catch (SQLException e) {
-            System.out.println("Какая-то ошибка: " + e.getMessage());
+            System.out.println(MESSAGE_ERROR + e.getMessage());
         }
         return Optional.empty();
 
@@ -153,7 +153,7 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
             return Optional.ofNullable(x);
 
         } catch (SQLException e) {
-            System.out.println("Какая-то ошибка: " + e.getMessage());
+            System.out.println(MESSAGE_ERROR + e.getMessage());
         }
         return Optional.empty();
     }

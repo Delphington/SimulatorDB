@@ -1,4 +1,9 @@
-public interface ConstantsStudents {
+public interface Constants {
+    String SPACE = " ";
+    String MESSAGE_ERROR = "Ошибка: ";
+    String MESSAGE_CONNECTION_ERROR = "Ошибка соединение: ";
+    String MESSAGE_CONNECTION_SUCCESS = "Ошибка соединение: ";
+
 
     String STUDENT_ID = "student_id";
     String STUDENT_NAME = "student_name";
@@ -10,5 +15,4 @@ public interface ConstantsStudents {
     String DISCIPLINES_DAY_OF_WEEK = "day_of_week";
     String DISCIPLINES_PAIR_NUMBER ="pair_number";
     String DISCIPLINES_COURSE_NUMBER ="course_number";
-
 }
