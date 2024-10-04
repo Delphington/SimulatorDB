@@ -21,7 +21,7 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
     public void setConnectionToBD() {
 
         try {
-            connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD);
+            connection = DriverManager.getConnection(Config.URL_STUDY, Config.USER, Config.PASSWORD);
             if (connection != null) {
                 System.out.println("Соединение установлено!");
             }
@@ -118,29 +118,17 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
 
     @Override
     public Optional<Object> INSERT(String studentName, int course) {
-        String query = "INSERT INTO students (student_name, course_number) VALUES (?, ?)";
+
+        String query = "INSERT INTO students (student_name, course_number) VALUES ('" +
+                studentName + "', '" + course + "');";
         try {
             preparedStatement = connection.prepareStatement(query);
 
-            // Устанавливаем значения параметров
-            // Добавление студентов
-
-//
-            preparedStatement.setString(1, studentName);
-            preparedStatement.setInt(2, course); // Предполагается, что course_number — это целое число
-            System.out.println("HERE 1");
-
-//Здесь ошибка
-            // Выполнение всех вставок
-            int x = preparedStatement.executeUpdate();
-
+            int x = preparedStatement.executeUpdate(); //Возвращает кол-во элементов
             if (x == 0) {
-                System.out.println("kes");
                 return Optional.empty();
             }
-            return Optional.ofNullable(ans);
-
-
+            return Optional.ofNullable(x);
         } catch (SQLException e) {
             System.out.println("Какая-то ошибка: " + e.getMessage());
         }
@@ -164,11 +152,9 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
             }
             return Optional.ofNullable(x);
 
-
         } catch (SQLException e) {
             System.out.println("Какая-то ошибка: " + e.getMessage());
         }
-
         return Optional.empty();
     }
 }
