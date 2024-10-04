@@ -5,8 +5,13 @@ public class Main {
     public static void main(String[] args) {
 
         SrvDB.initialization();
-       // SrvDB.GET("student", 100);
-       // SrvDB.GET("students", 20);
-        SrvDB.PUT("Capy", 10); //валидация данных на курс
+      //  SrvDB.GET("student", 1000);
+       // SrvDB.GET("students", 2);
+        //todo: Ошибка
+        //SrvDB.PUT("Capy", 10); //валидация данных на курс
+        SrvDB.DELETE(1000);
+        //-------------------------
+
+
     }
 }

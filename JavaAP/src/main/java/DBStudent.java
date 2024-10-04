@@ -123,11 +123,19 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
             preparedStatement = connection.prepareStatement(query);
 
             // Устанавливаем значения параметров
+            // Добавление студентов
+
+//
             preparedStatement.setString(1, studentName);
             preparedStatement.setInt(2, course); // Предполагается, что course_number — это целое число
+            System.out.println("HERE 1");
 
+//Здесь ошибка
+            // Выполнение всех вставок
             int x = preparedStatement.executeUpdate();
+
             if (x == 0) {
+                System.out.println("kes");
                 return Optional.empty();
             }
             return Optional.ofNullable(ans);
@@ -138,5 +146,29 @@ public class DBStudent implements ActionStudent, ConstantsStudents {
         }
         return Optional.empty();
 
+    }
+
+    @Override
+    public Optional<Object> DELETE(int id) {
+
+        String query = "DELETE FROM students WHERE student_id = " + id;
+
+        try {
+            preparedStatement = connection.prepareStatement(query);
+
+            // Выполняем запрос
+            int x = preparedStatement.executeUpdate();
+            // Если строка пустаю выкинем оболочку на null
+            if (x == 0) {
+                return Optional.empty();
+            }
+            return Optional.ofNullable(x);
+
+
+        } catch (SQLException e) {
+            System.out.println("Какая-то ошибка: " + e.getMessage());
+        }
+
+        return Optional.empty();
     }
 }
