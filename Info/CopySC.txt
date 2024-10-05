@@ -1,1 +1,0 @@
- COPY students FROM 'D:\_DELPGINGTON\University\Sem_3\BD\lab2\info\students.csv' DELIMITER ';' CSV;
