@@ -4,6 +4,6 @@ CREATE TABLE students (
     course_number INT CHECK (course_number > 0)
 )
 
--- Также команда
+-- Также команда(чтобы нормально id считались)
 ALTER SEQUENCE students_student_id_seq RESTART WITH 101;
 
